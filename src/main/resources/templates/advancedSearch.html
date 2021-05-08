@@ -1,0 +1,30 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Search Engine</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <form class="form-inline justify-content-center" method="get" th:action="@{/advanced-search}">
+            <select class="form-control"  id="dropOperator" name="category">
+                <option value="">select Category</option>
+                <option th:each="category :${categories}" th:value="${category}" th:text="${category}"></option>
+            </select>
+            <label for="jokeSearch">Joke search:</label>
+            <input  class="form-control" type="search" id="jokeSearch" th:name="key">
+            <input  class="form-control" type="submit">
+        </form>
+        <h3>Latest Searched Results</h3>
+        <th:block th:each="element:${searchedElements}">
+           <div>
+               <span th:text=${element.key}> key</span>
+               <span th:text=${element.count}> count</span>
+           </div>
+        </th:block>
+    </div>
+</div>
+</body>
+</html>

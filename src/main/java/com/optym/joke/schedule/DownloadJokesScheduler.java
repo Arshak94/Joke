@@ -29,8 +29,13 @@ public class DownloadJokesScheduler {
     @Scheduled(fixedDelay = 8 * 1000, initialDelay = 1000)
     public void downloadJoke(){
         LOGGER.info("START schedule");
-        JokeScheduleDTO joke = restTemplate.getForObject(JOKES_URL, JokeScheduleDTO.class);
-        jokeService.create(joke);
+        JokeScheduleDTO joke = null;
+        try {
+            joke = restTemplate.getForObject(JOKES_URL, JokeScheduleDTO.class);
+            jokeService.create(joke);
+        } catch (Exception e){
+            LOGGER.warn("Scheduler must be wait 15 minutes");
+        }
         LOGGER.info("END schedule");
     }
 }

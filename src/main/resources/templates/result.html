@@ -1,0 +1,72 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Search Engine</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.js"
+            integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-10 mt-5 mb-5">
+
+           <table id="example" class="table table-bordered" style="width: 100%">
+            <thead>
+            <tr>
+                <th> id</th>
+                <th> punchline</th>
+                <th> type</th>
+                <th> setup</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="search:  ${searchList}">
+                <td th:text="${search.id}"/>
+                <td th:text="${search.punchline}"/>
+                <td th:text="${search.type}"/>
+                <td th:text="${search.setup}"/>
+            </tr>
+            </tr>
+            </tbody>
+           </table>
+            <div th:if="${isSimple}">
+            </div>
+            <div th:unless="${isSimple}">
+                <button type="submit" id="submitButton" th:onclick="'download()'"> Export</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+      function download() {
+       var category = "[[${category}]]";
+       var key = "[[${key}]]";
+      console.log(category);
+      console.log(key);
+       $.ajax({
+            url: '/api/downloadXLS',
+             xhrFields:{
+                responseType: 'blob'
+            },
+            method: 'GET',
+            data: { category: category, key: key },
+            success: function (data) {
+             var blob = data;
+             var downloadUrl = URL.createObjectURL(blob);
+             var a = document.createElement("a");
+             a.href = downloadUrl;
+             a.download = "jokes.xlsx";
+             document.body.appendChild(a);
+             a.click();
+            },
+            error:function(data){
+
+            }
+        });
+      }
+</script>
+</body>
+</html>
